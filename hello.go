@@ -19,7 +19,7 @@ func getOption() (int, error) {
 	return option, err
 }
 
-func iniciarMonitoramento(url string) error {
+func initMonitoring(url string) error {
 	get, err := http.Get(url)
 	println(url, get.Status)
 	return err
@@ -34,7 +34,7 @@ func main() {
 	}
 	switch option {
 	case 1:
-		err := iniciarMonitoramento(url)
+		err := initMonitoring(url)
 		if err != nil {
 			println(err)
 			os.Exit(1)
