@@ -4,6 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
+)
+
+var (
+	logs []string
+	urls []string{"https://alura.com.br", "google.com"}
 )
 
 func printIntroduction() {
@@ -19,27 +25,36 @@ func getOption() (int, error) {
 	return option, err
 }
 
-func initMonitoring(url string) error {
-	get, err := http.Get(url)
-	println(url, get.Status)
-	return err
+func initMonitoring() {
+	for _, value := range urls {
+		resp, _ := http.Get(value)
+		logs = append(logs, strings.Join([]string{value, resp.Status}, " - "))
+	}
+	println("Monitoring")
+}
+
+func showLogs() {
+	for _, value := range logs {
+		println(value)
+	}
 }
 
 func main() {
-	url := "https://alura.com.br"
 	printIntroduction()
-	option, err := getOption()
-	if err != nil {
-		os.Exit(1)
-	}
-	switch option {
-	case 1:
-		err := initMonitoring(url)
+	for {
+		option, err := getOption()
 		if err != nil {
-			println(err)
 			os.Exit(1)
 		}
-	default:
-		println("Opção inválida")
+		switch option {
+		case 1:
+			initMonitoring(urls)
+		case 2:
+			showLogs()
+		case 3:
+			os.Exit(0)
+		default:
+			println("Opção inválida")
+		}
 	}
 }
